@@ -1,0 +1,795 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HR Výukové Výzvy - Kompetenční Modely & Popisy Pozic</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 2em;
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            opacity: 0.9;
+            font-size: 1.1em;
+        }
+
+        .progress-bar {
+            background: rgba(255,255,255,0.2);
+            height: 8px;
+            border-radius: 10px;
+            margin-top: 20px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            background: #4ade80;
+            height: 100%;
+            width: 0%;
+            transition: width 0.5s ease;
+        }
+
+        .score-board {
+            display: flex;
+            justify-content: space-around;
+            padding: 20px;
+            background: #f8fafc;
+            border-bottom: 2px solid #e2e8f0;
+        }
+
+        .score-item {
+            text-align: center;
+        }
+
+        .score-item .label {
+            color: #64748b;
+            font-size: 0.9em;
+            margin-bottom: 5px;
+        }
+
+        .score-item .value {
+            font-size: 1.8em;
+            font-weight: bold;
+            color: #667eea;
+        }
+
+        .challenges {
+            padding: 30px;
+        }
+
+        .challenge {
+            background: #f8fafc;
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 20px;
+            border: 2px solid #e2e8f0;
+            transition: all 0.3s ease;
+        }
+
+        .challenge:hover {
+            border-color: #667eea;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.1);
+        }
+
+        .challenge.completed {
+            background: #f0fdf4;
+            border-color: #4ade80;
+        }
+
+        .challenge-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .challenge-title {
+            font-size: 1.3em;
+            color: #1e293b;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .challenge-badge {
+            background: #667eea;
+            color: white;
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 0.8em;
+            font-weight: bold;
+        }
+
+        .challenge-description {
+            color: #475569;
+            line-height: 1.6;
+            margin-bottom: 20px;
+        }
+
+        .task-area {
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
+            margin-top: 15px;
+        }
+
+        .option {
+            background: white;
+            border: 2px solid #e2e8f0;
+            border-radius: 10px;
+            padding: 15px;
+            margin: 10px 0;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .option:hover {
+            border-color: #667eea;
+            transform: translateX(5px);
+        }
+
+        .option.selected {
+            background: #ede9fe;
+            border-color: #667eea;
+        }
+
+        .option.correct {
+            background: #f0fdf4;
+            border-color: #4ade80;
+        }
+
+        .option.incorrect {
+            background: #fef2f2;
+            border-color: #ef4444;
+        }
+
+        .drag-item {
+            background: #667eea;
+            color: white;
+            padding: 12px 20px;
+            border-radius: 8px;
+            margin: 8px;
+            display: inline-block;
+            cursor: move;
+            transition: all 0.3s ease;
+        }
+
+        .drag-item:hover {
+            transform: scale(1.05);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.3);
+        }
+
+        .drop-zone {
+            min-height: 80px;
+            border: 2px dashed #cbd5e1;
+            border-radius: 10px;
+            padding: 15px;
+            margin: 10px 0;
+            background: #f8fafc;
+        }
+
+        .drop-zone.drag-over {
+            background: #ede9fe;
+            border-color: #667eea;
+        }
+
+        .drop-zone-label {
+            font-weight: bold;
+            color: #475569;
+            margin-bottom: 10px;
+        }
+
+        .input-field {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e2e8f0;
+            border-radius: 8px;
+            font-size: 1em;
+            margin: 10px 0;
+            font-family: inherit;
+        }
+
+        .input-field:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        textarea.input-field {
+            min-height: 100px;
+            resize: vertical;
+        }
+
+        .btn {
+            background: #667eea;
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 8px;
+            font-size: 1em;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: bold;
+        }
+
+        .btn:hover {
+            background: #5568d3;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.3);
+        }
+
+        .btn:disabled {
+            background: #cbd5e1;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .feedback {
+            margin-top: 15px;
+            padding: 15px;
+            border-radius: 8px;
+            display: none;
+        }
+
+        .feedback.show {
+            display: block;
+        }
+
+        .feedback.success {
+            background: #f0fdf4;
+            border: 2px solid #4ade80;
+            color: #166534;
+        }
+
+        .feedback.error {
+            background: #fef2f2;
+            border: 2px solid #ef4444;
+            color: #991b1b;
+        }
+
+        .feedback.info {
+            background: #eff6ff;
+            border: 2px solid #3b82f6;
+            color: #1e3a8a;
+        }
+
+        .emoji {
+            font-size: 1.5em;
+            margin-right: 5px;
+        }
+
+        .tip-box {
+            background: #fef3c7;
+            border-left: 4px solid #f59e0b;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 5px;
+        }
+
+        .tip-box strong {
+            color: #92400e;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🎯 HR Výukové Výzvy</h1>
+            <p>Kompetenční modely & Popisy pracovních pozic</p>
+            <div class="progress-bar">
+                <div class="progress-fill" id="progressBar"></div>
+            </div>
+        </div>
+
+        <div class="score-board">
+            <div class="score-item">
+                <div class="label">Dokončené výzvy</div>
+                <div class="value" id="completedCount">0/5</div>
+            </div>
+            <div class="score-item">
+                <div class="label">Získané body</div>
+                <div class="value" id="totalPoints">0</div>
+            </div>
+            <div class="score-item">
+                <div class="label">Level</div>
+                <div class="value" id="level">🌱 Začátečník</div>
+            </div>
+        </div>
+
+        <div class="challenges">
+            <!-- Challenge 1: Detektivní práce -->
+            <div class="challenge" id="challenge1">
+                <div class="challenge-header">
+                    <div class="challenge-title">
+                        <span class="emoji">🕵️</span>
+                        <span>Výzva 1: Detektivní práce - Co dělá marketingový manažer?</span>
+                    </div>
+                    <div class="challenge-badge">20 bodů</div>
+                </div>
+                <div class="challenge-description">
+                    Dostali jste úkol vytvořit popis pozice pro marketingového manažera. V kanceláři jste našli tyhle poznámky od různých lidí. Které z nich jsou skutečně <strong>pracovní úkoly</strong> a které jsou jen <strong>osobní vlastnosti</strong>?
+                </div>
+                <div class="task-area">
+                    <div class="drop-zone-label">🎯 Pracovní úkoly (přetáhněte sem):</div>
+                    <div class="drop-zone" id="tasks-zone"></div>
+                    
+                    <div class="drop-zone-label">💎 Osobní vlastnosti (přetáhněte sem):</div>
+                    <div class="drop-zone" id="traits-zone"></div>
+                    
+                    <div style="margin-top: 20px;">
+                        <div class="drop-zone-label">📋 K roztřídění:</div>
+                        <div id="items-pool">
+                            <span class="drag-item" draggable="true" data-type="task">Tvorba marketingových kampaní</span>
+                            <span class="drag-item" draggable="true" data-type="trait">Kreativní myšlení</span>
+                            <span class="drag-item" draggable="true" data-type="task">Správa sociálních médií</span>
+                            <span class="drag-item" draggable="true" data-type="trait">Komunikativnost</span>
+                            <span class="drag-item" draggable="true" data-type="task">Analýza tržních trendů</span>
+                            <span class="drag-item" draggable="true" data-type="trait">Schopnost pracovat pod tlakem</span>
+                        </div>
+                    </div>
+                    
+                    <button class="btn" onclick="checkChallenge1()" style="margin-top: 20px;">Zkontrolovat</button>
+                    <div class="feedback" id="feedback1"></div>
+                </div>
+            </div>
+
+            <!-- Challenge 2: Kompetenční puzzle -->
+            <div class="challenge" id="challenge2">
+                <div class="challenge-header">
+                    <div class="challenge-title">
+                        <span class="emoji">🧩</span>
+                        <span>Výzva 2: Kompetenční puzzle - Složte si svého IT specialistu</span>
+                    </div>
+                    <div class="challenge-badge">25 bodů</div>
+                </div>
+                <div class="challenge-description">
+                    Máte vytvořit kompetenční model pro IT supportového specialistu. Vyberte <strong>3 hlavní kompetence</strong>, které by tato pozice měla mít. Pozor na past - ne všechny kompetence jsou pro tuto roli vhodné!
+                </div>
+                <div class="tip-box">
+                    <strong>💡 Tip:</strong> Myslete na to, co IT support skutečně dělá - řeší technické problémy uživatelů, komunikuje s lidmi a pracuje s různými systémy.
+                </div>
+                <div class="task-area">
+                    <div class="option" onclick="toggleOption(this, 'c2-1')">
+                        <strong>Technická expertíza</strong> - Schopnost diagnostikovat a řešit IT problémy
+                    </div>
+                    <div class="option" onclick="toggleOption(this, 'c2-2')">
+                        <strong>Kreativní design</strong> - Tvorba grafických návrhů a marketingových materiálů
+                    </div>
+                    <div class="option" onclick="toggleOption(this, 'c2-3')">
+                        <strong>Zákaznická komunikace</strong> - Schopnost vysvětlit technické věci srozumitelně
+                    </div>
+                    <div class="option" onclick="toggleOption(this, 'c2-4')">
+                        <strong>Finanční analýza</strong> - Práce s rozpočty a finančními výkazy
+                    </div>
+                    <div class="option" onclick="toggleOption(this, 'c2-5')">
+                        <strong>Řešení problémů</strong> - Analytické myšlení a systematický přístup k řešení
+                    </div>
+                    <div class="option" onclick="toggleOption(this, 'c2-6')">
+                        <strong>Vedení týmu</strong> - Management a delegování úkolů podřízeným
+                    </div>
+                    
+                    <button class="btn" onclick="checkChallenge2()" style="margin-top: 20px;">Zkontrolovat výběr</button>
+                    <div class="feedback" id="feedback2"></div>
+                </div>
+            </div>
+
+            <!-- Challenge 3: Rychlá diagnóza -->
+            <div class="challenge" id="challenge3">
+                <div class="challenge-header">
+                    <div class="challenge-title">
+                        <span class="emoji">⚡</span>
+                        <span>Výzva 3: Rychlá diagnóza - Co je špatně?</span>
+                    </div>
+                    <div class="challenge-badge">30 bodů</div>
+                </div>
+                <div class="challenge-description">
+                    Kolega vám přinesl popis pozice "Účetní". Přečtěte si ho a najděte <strong>3 chyby</strong>, které by v popisu pozice být neměly:
+                </div>
+                <div class="task-area">
+                    <div style="background: #f1f5f9; padding: 20px; border-radius: 10px; margin: 15px 0; line-height: 1.8;">
+                        <strong>POPIS POZICE: ÚČETNÍ</strong><br><br>
+                        <em>"Hledáme nadšeného účetního, který musí být muž ve věku 25-35 let. Kandidát musí být perfekcionista, který nikdy nedělá chyby. Bude odpovědný za vedení účetnictví, zpracování faktur a přípravu daňových přiznání. Vyžadujeme absolutní oddanost firmě a ochotu pracovat i o víkendech bez nároku na volno. Plat 25 000 Kč měsíčně."</em>
+                    </div>
+                    
+                    <div style="margin-top: 20px;">
+                        <label style="font-weight: bold; display: block; margin-bottom: 10px;">Napište 3 chyby, které jste našli:</label>
+                        <input type="text" class="input-field" id="error1" placeholder="Chyba 1...">
+                        <input type="text" class="input-field" id="error2" placeholder="Chyba 2...">
+                        <input type="text" class="input-field" id="error3" placeholder="Chyba 3...">
+                    </div>
+                    
+                    <button class="btn" onclick="checkChallenge3()" style="margin-top: 20px;">Odeslat odpovědi</button>
+                    <div class="feedback" id="feedback3"></div>
+                </div>
+            </div>
+
+            <!-- Challenge 4: Simulátor rozhovoru -->
+            <div class="challenge" id="challenge4">
+                <div class="challenge-header">
+                    <div class="challenge-title">
+                        <span class="emoji">🎭</span>
+                        <span>Výzva 4: Simulátor rozhovoru - Zjistěte potřeby oddělení</span>
+                    </div>
+                    <div class="challenge-badge">35 bodů</div>
+                </div>
+                <div class="challenge-description">
+                    Vedoucí prodeje si k vám přišel stěžovat: "Potřebuju někoho nového do týmu, lidi to nestíhají!" Vaším úkolem je položit <strong>správné otázky</strong>, abyste zjistili, jakou pozici skutečně potřebuje. Vyberte 4 nejlepší otázky:
+                </div>
+                <div class="task-area">
+                    <div class="option" onclick="toggleOption(this, 'c4-1')">
+                        Jaké konkrétní úkoly momentálně nestíháte?
+                    </div>
+                    <div class="option" onclick="toggleOption(this, 'c4-2')">
+                        Kolik chcete za tu pozici platit?
+                    </div>
+                    <div class="option" onclick="toggleOption(this, 'c4-3')">
+                        Jaké dovednosti by ideální kandidát měl mít?
+                    </div>
+                    <div class="option" onclick="toggleOption(this, 'c4-4')">
+                        Kdy potřebujete, aby ten člověk nastoupil?
+                    </div>
+                    <div class="option" onclick="toggleOption(this, 'c4-5')">
+                        Komu by nový zaměstnanec přímo zodpovídal?
+                    </div>
+                    <div class="option" onclick="toggleOption(this, 'c4-6')">
+                        Jaký je váš oblíbený typ osobnosti?
+                    </div>
+                    <div class="option" onclick="toggleOption(this, 'c4-7')">
+                        Jaké jsou hlavní cíle oddělení pro příští rok?
+                    </div>
+                    
+                    <button class="btn" onclick="checkChallenge4()" style="margin-top: 20px;">Zkontrolovat otázky</button>
+                    <div class="feedback" id="feedback4"></div>
+                </div>
+            </div>
+
+            <!-- Challenge 5: Finální mise -->
+            <div class="challenge" id="challenge5">
+                <div class="challenge-header">
+                    <div class="challenge-title">
+                        <span class="emoji">🏆</span>
+                        <span>Výzva 5: Finální mise - Vytvořte svůj první popis pozice</span>
+                    </div>
+                    <div class="challenge-badge">40 bodů</div>
+                </div>
+                <div class="challenge-description">
+                    Gratulujeme! Došli jste až sem. Teď je čas ukázat, co jste se naučili. Vytvořte základní kostru popisu pozice pro <strong>"Asistent/ka zákaznického servisu"</strong>.
+                </div>
+                <div class="tip-box">
+                    <strong>💡 Nezapomeňte:</strong> Dobrý popis pozice obsahuje název, hlavní odpovědnosti, potřebné kompetence a není diskriminující.
+                </div>
+                <div class="task-area">
+                    <label style="font-weight: bold; display: block; margin: 15px 0 5px 0;">Název pozice:</label>
+                    <input type="text" class="input-field" id="jobTitle" value="Asistent/ka zákaznického servisu" readonly style="background: #f1f5f9;">
+                    
+                    <label style="font-weight: bold; display: block; margin: 15px 0 5px 0;">Vypište 3 hlavní odpovědnosti:</label>
+                    <textarea class="input-field" id="responsibilities" placeholder="Např.: 1. Komunikace se zákazníky...&#10;2. ...&#10;3. ..."></textarea>
+                    
+                    <label style="font-weight: bold; display: block; margin: 15px 0 5px 0;">Vypište 3 klíčové kompetence:</label>
+                    <textarea class="input-field" id="competencies" placeholder="Např.: 1. Komunikační dovednosti...&#10;2. ...&#10;3. ..."></textarea>
+                    
+                    <button class="btn" onclick="checkChallenge5()" style="margin-top: 20px;">Odeslat popis pozice</button>
+                    <div class="feedback" id="feedback5"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Game state
+        let gameState = {
+            completed: new Set(),
+            points: 0,
+            selectedOptions: {}
+        };
+
+        // Drag and drop functionality
+        let draggedElement = null;
+
+        document.addEventListener('DOMContentLoaded', () => {
+            setupDragAndDrop();
+        });
+
+        function setupDragAndDrop() {
+            const items = document.querySelectorAll('.drag-item');
+            const zones = document.querySelectorAll('.drop-zone');
+
+            items.forEach(item => {
+                item.addEventListener('dragstart', (e) => {
+                    draggedElement = e.target;
+                    e.target.style.opacity = '0.5';
+                });
+
+                item.addEventListener('dragend', (e) => {
+                    e.target.style.opacity = '1';
+                });
+            });
+
+            zones.forEach(zone => {
+                zone.addEventListener('dragover', (e) => {
+                    e.preventDefault();
+                    zone.classList.add('drag-over');
+                });
+
+                zone.addEventListener('dragleave', () => {
+                    zone.classList.remove('drag-over');
+                });
+
+                zone.addEventListener('drop', (e) => {
+                    e.preventDefault();
+                    zone.classList.remove('drag-over');
+                    if (draggedElement) {
+                        zone.appendChild(draggedElement);
+                    }
+                });
+            });
+        }
+
+        function toggleOption(element, id) {
+            if (element.classList.contains('correct') || element.classList.contains('incorrect')) {
+                return; // Don't allow changes after checking
+            }
+            element.classList.toggle('selected');
+        }
+
+        function checkChallenge1() {
+            const tasksZone = document.getElementById('tasks-zone');
+            const traitsZone = document.getElementById('traits-zone');
+            const feedback = document.getElementById('feedback1');
+
+            const tasksItems = Array.from(tasksZone.children);
+            const traitsItems = Array.from(traitsZone.children);
+
+            let correct = true;
+            let score = 0;
+
+            tasksItems.forEach(item => {
+                if (item.dataset.type === 'task') {
+                    score += 3;
+                } else {
+                    correct = false;
+                }
+            });
+
+            traitsItems.forEach(item => {
+                if (item.dataset.type === 'trait') {
+                    score += 3;
+                } else {
+                    correct = false;
+                }
+            });
+
+            if (tasksItems.length === 3 && traitsItems.length === 3 && correct) {
+                feedback.className = 'feedback success show';
+                feedback.innerHTML = '<span class="emoji">🎉</span><strong>Výborně!</strong> Perfektně jste rozlišili pracovní úkoly od osobních vlastností. To je základ pro tvorbu kvalitního popisu pozice! +20 bodů';
+                completeChallenge('challenge1', 20);
+            } else if (score > 12) {
+                feedback.className = 'feedback info show';
+                feedback.innerHTML = '<span class="emoji">👍</span><strong>Skoro!</strong> Máte to dobře rozmyšlené, ale zkuste ještě jednou. Pracovní úkoly jsou konkrétní činnosti, vlastnosti jsou to, JAK je člověk vykonává.';
+            } else {
+                feedback.className = 'feedback error show';
+                feedback.innerHTML = '<span class="emoji">🤔</span><strong>Zkuste to znovu!</strong> Tip: Pracovní úkoly odpovídají na otázku "Co bude dělat?", osobní vlastnosti na "Jaký by měl být?"';
+            }
+        }
+
+        function checkChallenge2() {
+            const options = document.querySelectorAll('#challenge2 .option');
+            const selected = Array.from(options).filter(opt => opt.classList.contains('selected'));
+            const feedback = document.getElementById('feedback2');
+
+            if (selected.length !== 3) {
+                feedback.className = 'feedback error show';
+                feedback.innerHTML = '<span class="emoji">⚠️</span>Vyberte prosím přesně 3 kompetence!';
+                return;
+            }
+
+            const correctIds = ['c2-1', 'c2-3', 'c2-5'];
+            const selectedIds = Array.from(selected).map(opt => opt.getAttribute('onclick').match(/'([^']+)'/)[1]);
+
+            const allCorrect = correctIds.every(id => selectedIds.includes(id)) && selectedIds.length === 3;
+
+            options.forEach(opt => {
+                const id = opt.getAttribute('onclick').match(/'([^']+)'/)[1];
+                if (correctIds.includes(id)) {
+                    opt.classList.add('correct');
+                } else if (opt.classList.contains('selected')) {
+                    opt.classList.add('incorrect');
+                }
+            });
+
+            if (allCorrect) {
+                feedback.className = 'feedback success show';
+                feedback.innerHTML = '<span class="emoji">🌟</span><strong>Skvělá práce!</strong> Vybrali jste přesně ty kompetence, které IT support skutečně potřebuje: technickou expertízu, komunikaci se zákazníky a schopnost řešit problémy. +25 bodů';
+                completeChallenge('challenge2', 25);
+            } else {
+                feedback.className = 'feedback info show';
+                feedback.innerHTML = '<span class="emoji">💭</span><strong>Ještě to není ono.</strong> Zelené jsou správné odpovědi. Červené jste vybrali špatně. IT support primárně řeší technické problémy a pomáhá uživatelům - která kompetence k tomu nepatří?';
+            }
+        }
+
+        function checkChallenge3() {
+            const error1 = document.getElementById('error1').value.toLowerCase();
+            const error2 = document.getElementById('error2').value.toLowerCase();
+            const error3 = document.getElementById('error3').value.toLowerCase();
+            const feedback = document.getElementById('feedback3');
+
+            const allErrors = (error1 + ' ' + error2 + ' ' + error3).toLowerCase();
+            
+            let foundErrors = 0;
+            const errorTypes = {
+                discrimination: false,
+                unrealistic: false,
+                illegal: false
+            };
+
+            // Check for discrimination (gender, age)
+            if (allErrors.includes('muž') || allErrors.includes('pohlaví') || allErrors.includes('věk') || 
+                allErrors.includes('25-35') || allErrors.includes('diskriminace') || allErrors.includes('gender')) {
+                errorTypes.discrimination = true;
+                foundErrors++;
+            }
+
+            // Check for unrealistic expectations
+            if (allErrors.includes('perfekcionista') || allErrors.includes('nikdy') || allErrors.includes('chyb') ||
+                allErrors.includes('nereálné') || allErrors.includes('nerealistick')) {
+                errorTypes.unrealistic = true;
+                foundErrors++;
+            }
+
+            // Check for illegal work conditions or low salary
+            if (allErrors.includes('víkend') || allErrors.includes('volno') || allErrors.includes('plat') || 
+                allErrors.includes('25000') || allErrors.includes('25 000') || allErrors.includes('nízk') ||
+                allErrors.includes('mzda') || allErrors.includes('oddanost')) {
+                errorTypes.illegal = true;
+                foundErrors++;
+            }
+
+            if (foundErrors >= 3 || (foundErrors >= 2 && (error1 && error2 && error3))) {
+                feedback.className = 'feedback success show';
+                feedback.innerHTML = '<span class="emoji">🎯</span><strong>Výborně!</strong> Našli jste hlavní problémy:<br>' +
+                    '1️⃣ Diskriminace podle pohlaví a věku<br>' +
+                    '2️⃣ Nerealistické očekávání ("nikdy nedělá chyby")<br>' +
+                    '3️⃣ Problematické pracovní podmínky a nízký plat<br>+30 bodů';
+                completeChallenge('challenge3', 30);
+            } else if (foundErrors >= 1) {
+                feedback.className = 'feedback info show';
+                feedback.innerHTML = '<span class="emoji">🔍</span><strong>Našli jste něco, ale ne všechno!</strong> Tip: Podívejte se na požadavky na pohlaví/věk, realistická očekávání a pracovní podmínky.';
+            } else {
+                feedback.className = 'feedback error show';
+                feedback.innerHTML = '<span class="emoji">🤔</span><strong>Zkuste to znovu!</strong> Podívejte se pozorně na: diskriminaci, realistická očekávání a zákonnost požadavků.';
+            }
+        }
+
+        function checkChallenge4() {
+            const options = document.querySelectorAll('#challenge4 .option');
+            const selected = Array.from(options).filter(opt => opt.classList.contains('selected'));
+            const feedback = document.getElementById('feedback4');
+
+            if (selected.length !== 4) {
+                feedback.className = 'feedback error show';
+                feedback.innerHTML = '<span class="emoji">⚠️</span>Vyberte prosím přesně 4 otázky!';
+                return;
+            }
+
+            const correctIds = ['c4-1', 'c4-3', 'c4-5', 'c4-7'];
+            const selectedIds = Array.from(selected).map(opt => opt.getAttribute('onclick').match(/'([^']+)'/)[1]);
+
+            const allCorrect = correctIds.every(id => selectedIds.includes(id)) && selectedIds.length === 4;
+
+            options.forEach(opt => {
+                const id = opt.getAttribute('onclick').match(/'([^']+)'/)[1];
+                if (correctIds.includes(id)) {
+                    opt.classList.add('correct');
+                } else if (opt.classList.contains('selected')) {
+                    opt.classList.add('incorrect');
+                }
+            });
+
+            if (allCorrect) {
+                feedback.className = 'feedback success show';
+                feedback.innerHTML = '<span class="emoji">🎪</span><strong>Perfektní výběr otázek!</strong> Položili jste přesně ty otázky, které vám pomohou pochopit skutečné potřeby oddělení a vytvořit relevantní popis pozice. +35 bodů';
+                completeChallenge('challenge4', 35);
+            } else {
+                feedback.className = 'feedback info show';
+                feedback.innerHTML = '<span class="emoji">📝</span><strong>Skoro!</strong> Zelené otázky jsou ty správné. Zaměřte se na otázky, které zjišťují konkrétní potřeby, kompetence a kontext pozice - ne osobní preference nebo administrativní detaily.';
+            }
+        }
+
+        function checkChallenge5() {
+            const responsibilities = document.getElementById('responsibilities').value.trim();
+            const competencies = document.getElementById('competencies').value.trim();
+            const feedback = document.getElementById('feedback5');
+
+            if (!responsibilities || !competencies) {
+                feedback.className = 'feedback error show';
+                feedback.innerHTML = '<span class="emoji">⚠️</span>Vyplňte prosím obě pole!';
+                return;
+            }
+
+            if (responsibilities.length < 50 || competencies.length < 50) {
+                feedback.className = 'feedback info show';
+                feedback.innerHTML = '<span class="emoji">📝</span><strong>Přidejte více detailů!</strong> Zkuste napsat konkrétnější a podrobnější odpovědnosti a kompetence.';
+                return;
+            }
+
+            // Simple check for discriminatory language
+            const combined = (responsibilities + ' ' + competencies).toLowerCase();
+            if (combined.includes('muž') || combined.includes('žena') || combined.includes('mladý') || 
+                combined.includes('věk') || combined.match(/\d{2}-\d{2}/)) {
+                feedback.className = 'feedback error show';
+                feedback.innerHTML = '<span class="emoji">⛔</span><strong>Pozor na diskriminaci!</strong> V popisu pozice se vyhněte zmínkám o pohlaví, věku nebo jiným diskriminačním kritériím.';
+                return;
+            }
+
+            feedback.className = 'feedback success show';
+            feedback.innerHTML = '<span class="emoji">🏆</span><strong>Gratulujeme! Dokončili jste všechny výzvy!</strong><br><br>' +
+                'Vytvořili jste svůj první popis pozice! I když to není perfektní, máte solidní základ. V praxi byste tento popis ještě konzultovali s vedoucím oddělení a upřesnili detaily.<br><br>' +
+                '<strong>Naučili jste se:</strong><br>' +
+                '✅ Rozlišovat úkoly a vlastnosti<br>' +
+                '✅ Identifikovat klíčové kompetence<br>' +
+                '✅ Vyhýbat se diskriminaci<br>' +
+                '✅ Klást správné otázky<br>' +
+                '✅ Vytvořit základní popis pozice<br><br>' +
+                '+40 bodů a titul <strong>HR Expert</strong>! 🌟';
+            completeChallenge('challenge5', 40);
+        }
+
+        function completeChallenge(challengeId, points) {
+            if (!gameState.completed.has(challengeId)) {
+                gameState.completed.add(challengeId);
+                gameState.points += points;
+                document.getElementById(challengeId).classList.add('completed');
+                updateScoreBoard();
+            }
+        }
+
+        function updateScoreBoard() {
+            const total = 5;
+            const completed = gameState.completed.size;
+            const percentage = (completed / total) * 100;
+
+            document.getElementById('completedCount').textContent = `${completed}/${total}`;
+            document.getElementById('totalPoints').textContent = gameState.points;
+            document.getElementById('progressBar').style.width = percentage + '%';
+
+            // Update level
+            let level = '🌱 Začátečník';
+            if (gameState.points >= 120) level = '🏆 HR Expert';
+            else if (gameState.points >= 80) level = '⭐ Pokročilý';
+            else if (gameState.points >= 40) level = '📚 Student';
+
+            document.getElementById('level').textContent = level;
+        }
+    </script>
+</body>
+</html>

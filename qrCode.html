@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<!-- saved from url=(0061)file:///C:/Users/krausova.katerina/Downloads/qr_kod_novy.html -->
+<html lang="cs"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>QR Kód - HR Výukové Výzvy</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+        
+        .container {
+            background: white;
+            border-radius: 30px;
+            padding: 60px;
+            text-align: center;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            max-width: 700px;
+        }
+        
+        h1 {
+            color: #667eea;
+            margin-bottom: 15px;
+            font-size: 2.5em;
+            font-weight: bold;
+        }
+        
+        .subtitle {
+            color: #64748b;
+            margin-bottom: 40px;
+            font-size: 1.2em;
+            font-weight: 500;
+        }
+        
+        .qr-container {
+            background: linear-gradient(135deg, #f8fafc 0%, #e0e7ff 100%);
+            padding: 40px;
+            border-radius: 25px;
+            margin: 40px 0;
+            border: 4px solid #667eea;
+            box-shadow: 0 10px 30px rgba(102, 126, 234, 0.2);
+        }
+        
+        .qr-code {
+            width: 350px;
+            height: 350px;
+            margin: 0 auto;
+            background: white;
+            padding: 20px;
+            border-radius: 20px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .scan-text {
+            margin-top: 25px;
+            font-size: 1.3em;
+            color: #1e293b;
+            font-weight: 600;
+        }
+        
+        .instructions {
+            background: #eff6ff;
+            padding: 30px;
+            border-radius: 20px;
+            border-left: 6px solid #3b82f6;
+            text-align: left;
+            margin-top: 40px;
+        }
+        
+        .instructions h3 {
+            color: #1e40af;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 1.4em;
+        }
+        
+        .instructions ol {
+            color: #475569;
+            line-height: 2;
+            margin-left: 25px;
+            font-size: 1.05em;
+        }
+        
+        .instructions li {
+            margin: 12px 0;
+        }
+        
+        .instructions strong {
+            color: #1e40af;
+        }
+        
+        .emoji {
+            font-size: 1.5em;
+        }
+        
+        .features {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+            margin-top: 30px;
+        }
+        
+        .feature-box {
+            background: white;
+            padding: 20px;
+            border-radius: 15px;
+            border: 2px solid #e0e7ff;
+            text-align: center;
+        }
+        
+        .feature-box .icon {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+        
+        .feature-box h4 {
+            color: #667eea;
+            margin-bottom: 8px;
+            font-size: 1.1em;
+        }
+        
+        .feature-box p {
+            color: #64748b;
+            font-size: 0.95em;
+            line-height: 1.5;
+        }
+        
+        .info-box {
+            background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+            padding: 25px;
+            border-radius: 15px;
+            margin-top: 30px;
+            border-left: 6px solid #f59e0b;
+        }
+        
+        .info-box p {
+            color: #92400e;
+            line-height: 1.8;
+            font-size: 1.05em;
+        }
+        
+        .footer {
+            margin-top: 40px;
+            padding-top: 20px;
+            border-top: 2px solid #e2e8f0;
+            color: #64748b;
+            font-size: 0.95em;
+        }
+        
+        @media print {
+            body {
+                background: white;
+            }
+            .container {
+                box-shadow: none;
+                max-width: 100%;
+            }
+        }
+        
+        @media (max-width: 600px) {
+            .features {
+                grid-template-columns: 1fr;
+            }
+            
+            .container {
+                padding: 30px;
+            }
+            
+            h1 {
+                font-size: 1.8em;
+            }
+            
+            .qr-code {
+                width: 250px;
+                height: 250px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🎯 HR Výukové Výzvy</h1>
+        <p class="subtitle">Kompetenční modely &amp; Popisy pracovních pozic</p>
+        
+        <div class="qr-container">
+            <div class="qr-code">
+                <div id="qrcode" title="/index.html"><canvas width="310" height="310" style="display: none;"></canvas><img src="data:image/png;base64,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" style="display: block;"></div>
+            </div>
+            <p class="scan-text">📱 Naskenujte QR kód a začněte!</p>
+        </div>
+        
+        <div class="instructions">
+            <h3><span class="emoji">🚀</span> Jak se zapojit:</h3>
+            <ol>
+                <li><strong>Naskenujte QR kód</strong> fotoaparátem nebo QR čtečkou</li>
+                <li><strong>Otevře se interaktivní stránka</strong> s 5 zábavnými výzvami</li>
+                <li><strong>Plňte úkoly</strong> a sbírejte body (celkem až 150 bodů!)</li>
+                <li><strong>Staňte se HR Expertem</strong> a naučte se praktické dovednosti</li>
+            </ol>
+        </div>
+        
+        <div class="features">
+            <div class="feature-box">
+                <div class="icon">🎮</div>
+                <h4>Herní prvky</h4>
+                <p>Body, levely a okamžitá zpětná vazba</p>
+            </div>
+            <div class="feature-box">
+                <div class="icon">🎯</div>
+                <h4>Praktické úkoly</h4>
+                <p>Reálné situace z HR praxe</p>
+            </div>
+            <div class="feature-box">
+                <div class="icon">📱</div>
+                <h4>Kdekoli</h4>
+                <p>Funguje na mobilu, tabletu i PC</p>
+            </div>
+            <div class="feature-box">
+                <div class="icon">⚡</div>
+                <h4>Rychlé</h4>
+                <p>Cca 20-30 minut na všechny výzvy</p>
+            </div>
+        </div>
+        
+        <div class="info-box">
+            <p><strong>💡 Pro lektory:</strong> Tento QR kód můžete promítnout, vytisknout nebo sdílet emailem. Účastníci se mohou připojit kdykoliv během kurzu. Stránka funguje bez instalace aplikace!</p>
+        </div>
+        
+        <div class="footer">
+            <p>Vytvořeno pro začínající personalisty • Téma: Identifikace personálních potřeb</p>
+        </div>
+    </div>
+    
+    <script src="./QR Kód - HR Výukové Výzvy_files/qrcode.min.js.stáhnout"></script>
+    <script>
+        // Vytvoříme QR kód, který vede na výukové výzvy
+        // QR kód automaticky najde správný soubor, pokud jsou oba soubory ve stejné složce
+        const currentUrl = window.location.href;
+        const baseUrl = currentUrl.substring(0, currentUrl.lastIndexOf('/') + 1);
+        const targetUrl = baseUrl + 'hr_learning_challenges.html';
+        
+        new QRCode(document.getElementById("qrcode"), {
+            text: targetUrl,
+            width: 310,
+            height: 310,
+            colorDark: "#667eea",
+            colorLight: "#ffffff",
+            correctLevel: QRCode.CorrectLevel.H
+        });
+    </script>
+
+</body></html>
